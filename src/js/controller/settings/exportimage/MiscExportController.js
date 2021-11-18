@@ -32,7 +32,7 @@
 
     frameStr += '/* Piskel data for \"' + this.getPiskelName_() + '\" */\n\n';
 
-    frameStr += 'static const uint32_t ' + cName.toLowerCase();
+    frameStr += 'static const uint8_t ' + cName.toLowerCase();
     frameStr += '_data[' + frameCount + '][' + width * height + '] = {\n';
 
     for (var i = 0 ; i < frameCount ; i++) {
@@ -43,8 +43,13 @@
 
       frameStr += '{\n';
       for (var j = 0; j < pix.length; j += 4) {
-        frameStr += this.rgbToCHex(pix[j], pix[j + 1], pix[j + 2], pix[j + 3]);
-        if (j != pix.length - 4) {
+        // frameStr += this.rgbToCHex(pix[j], pix[j + 1], pix[j + 2], pix[j + 3]);
+        
+        if (j/4 % 8 == 0 && j != pix.length - 4) {
+          frameStr += '0b';
+        } 
+        frameStr += pix[j+3] != 0x00 ? "1" : "0";
+        if (j/4 % 8 == 7 && j != pix.length - 4) {
           frameStr += ', ';
         }
         if (((j + 4) % (width * 4)) === 0) {
